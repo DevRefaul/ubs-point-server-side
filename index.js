@@ -69,6 +69,23 @@ const run = async () => {
             }
         })
 
+        // get all the sellers
+        app.get('/sellers', async (req, res) => {
+            try {
+                const filter = { role: "seller" }
+                const sellers = await Users.find(filter).toArray()
+                res.send({
+                    message: "Success",
+                    sellers
+                }
+                )
+            } catch (error) {
+                res.send({
+                    message: error.message
+                })
+            }
+        })
+
 
         // getting a user by emai
         app.get('/user', async (req, res) => {
