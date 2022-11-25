@@ -21,7 +21,7 @@ const client = new MongoClient(uri)
 const run = async () => {
 
     const Bikes = client.db('USB').collection('bikes')
-    const users = client.db('USB').collection('users')
+    const Users = client.db('USB').collection('users')
 
     try {
 
@@ -31,28 +31,6 @@ const run = async () => {
         })
 
 
-        // getting bikes by category
-        app.get('/bikes', async (req, res) => {
-            const query = req.query;
-
-            // filtering the data
-            const filter = query
-            // getting the values
-            const bikes = await Bikes.find(filter).toArray()
-            res.send({ bikes })
-        })
-
-        // getting bike by id
-        app.get('/bikes/:id', async (req, res) => {
-            const id = req.params.id;
-
-            // filtering the data
-            const query = { _id: ObjectId(id) }
-            // getting the values
-            const bike = await Bikes.findOne(query)
-            res.send({ bike })
-        })
-
 
         // creating user collection in database
         app.post('/adduser', async (req, res) => {
@@ -60,18 +38,35 @@ const run = async () => {
             try {
                 const user = req.body;
                 console.log(user)
-                const result = await users.insertOne(user)
+                const result = await Users.insertOne(user)
                 res.send({
                     message: "Success",
                     result
                 })
             } catch (error) {
-                res.status(401).send({
+                res.send({
                     message: error.message
                 })
             }
 
 
+        })
+
+        // get all the buyers
+        app.get('/buyers', async (req, res) => {
+            try {
+                const filter = { role: "buyer" }
+                const buyers = await Users.find(filter).toArray()
+                res.send({
+                    message: "Success",
+                    buyers
+                }
+                )
+            } catch (error) {
+                res.send({
+                    message: error.message
+                })
+            }
         })
 
 
@@ -80,17 +75,55 @@ const run = async () => {
             try {
                 const email = req.query.email;
                 const filter = { email: email }
-                const result = await users.findOne(filter)
+                const result = await Users.findOne(filter)
                 res.send({
                     message: "Success",
                     result
                 })
             } catch (error) {
-                res.status(401).send({
+                res.send({
                     message: error.message
                 })
             }
         })
+
+
+
+
+        // getting bikes by category
+        app.get('/bikes', async (req, res) => {
+            try {
+                const query = req.query;
+
+                // filtering the data
+                const filter = query
+                // getting the values
+                const bikes = await Bikes.find(filter).toArray()
+                res.send({ message: "Success", bikes })
+            } catch (error) {
+                res.send({
+                    message: error.message
+                })
+            }
+        })
+
+        // getting bike by id
+        app.get('/bikes/:id', async (req, res) => {
+            try {
+                const id = req.params.id;
+
+                // filtering the data
+                const query = { _id: ObjectId(id) }
+                // getting the values
+                const bike = await Bikes.findOne(query)
+                res.send({ message: "Success", bike })
+            } catch (error) {
+                res.send({
+                    message: error.message
+                })
+            }
+        })
+
 
 
 
