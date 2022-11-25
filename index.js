@@ -172,6 +172,28 @@ const run = async () => {
             }
         })
 
+        // delete reported post
+        app.delete('/deletepost', async (req, res) => {
+            try {
+                const id = req.query.reportedpost;
+                const reportedId = req.query.reportedqueue;
+                const filter = { _id: ObjectId(id) }
+
+                // filter reported post
+                const reportedPostQueue = { _id: ObjectId(reportedId) }
+
+
+                const deleteReportedQueue = await ReportedPosts.deleteOne(reportedPostQueue)
+
+                const deletePost = await Bikes.deleteOne(filter)
+                res.send({ message: "Success", deletePost })
+            } catch (error) {
+                res.send({
+                    message: error.message
+                })
+            }
+
+        })
 
 
 
