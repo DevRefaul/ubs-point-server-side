@@ -75,7 +75,7 @@ const run = async () => {
         })
 
 
-        // getting a user by email
+        // getting a user by emai
         app.get('/user', async (req, res) => {
             try {
                 const email = req.query.email;
