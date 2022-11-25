@@ -105,6 +105,31 @@ const run = async () => {
             }
         })
 
+        // update user name
+        app.patch('/updatename', async (req, res) => {
+            try {
+                const userInfo = req.body;
+
+                const email = userInfo.email
+                const userName = userInfo.name
+                // updating the name field
+                const updatedDoc = { $set: { name: userName } }
+
+                const filter = { email: email }
+                const updateName = await Users.updateOne(filter, updatedDoc)
+                res.send({
+                    message: "Success",
+                    updateName
+                })
+            } catch (error) {
+                res.send({
+                    message: error.message
+                })
+            }
+        })
+
+
+
         // delete a user
         app.delete('/deleteuser/:id', async (req, res) => {
             try {
