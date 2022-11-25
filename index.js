@@ -22,6 +22,7 @@ const run = async () => {
 
     const Bikes = client.db('USB').collection('bikes')
     const Users = client.db('USB').collection('users')
+    const ReportedPosts = client.db('USB').collection('reportedposts')
 
     try {
 
@@ -134,6 +135,22 @@ const run = async () => {
                 // getting the values
                 const bike = await Bikes.findOne(query)
                 res.send({ message: "Success", bike })
+            } catch (error) {
+                res.send({
+                    message: error.message
+                })
+            }
+        })
+
+
+        // report post
+        app.post('/report', async (req, res) => {
+            try {
+                const reportedInfo = req.body
+                const reportedPostInfo = { reportedInfo: reportedInfo }
+
+                const reported = await ReportedPosts.insertOne(reportedPostInfo)
+                res.send({ message: "Success", reported })
             } catch (error) {
                 res.send({
                     message: error.message
