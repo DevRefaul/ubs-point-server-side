@@ -143,6 +143,20 @@ const run = async () => {
         })
 
 
+        // get all the reported post
+        app.get('/reported', async (req, res) => {
+            try {
+                const query = {};
+                const reportedItems = await ReportedPosts.find(query).toArray()
+                res.send({ message: "Success", reportedItems })
+            } catch (error) {
+                res.send({
+                    message: error.message
+                })
+            }
+        })
+
+
         // report post
         app.post('/report', async (req, res) => {
             try {
