@@ -105,6 +105,22 @@ const run = async () => {
             }
         })
 
+        // delete a user
+        app.delete('/deleteuser/:id', async (req, res) => {
+            try {
+                const id = req.params.id;
+                const filter = { _id: ObjectId(id) };
+                const deleteUser = await Users.deleteOne(filter)
+                res.send({
+                    message: "Success",
+                    deleteUser
+                })
+            } catch (error) {
+                res.send({
+                    message: error.message
+                })
+            }
+        })
 
 
 
