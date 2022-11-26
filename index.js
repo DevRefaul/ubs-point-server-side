@@ -94,6 +94,7 @@ const run = async () => {
             try {
                 const email = req.query.email;
                 const filter = { email: email }
+                console.log(filter)
                 const result = await Users.findOne(filter)
                 res.send({
                     message: "Success",
