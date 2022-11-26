@@ -279,7 +279,30 @@ const run = async () => {
                 const filter = { email: sellerEmail }
                 const findSeller = await Users.findOne(filter)
 
-                const updatedDoc = { $set: { sellerVerified: "true" } }
+                const updatedDoc = { $set: { sellerVerified: "true", verifyMessage: "Account Verified" } }
+                const verifiedSuccess = await Users.updateOne(findSeller, updatedDoc)
+                res.send({
+                    message: "success",
+                    verifiedSuccess
+                })
+            } catch (error) {
+                res.send({
+                    message: error.message
+                })
+            }
+        })
+
+        // cancel verifying seller and updating their verified status
+        app.patch('/cancelverify', async (req, res) => {
+            try {
+                const sellerEmail = req.body.email;
+
+                const filter = { email: sellerEmail }
+                const findSeller = await Users.findOne(filter)
+
+                console.log(findSeller);
+
+                const updatedDoc = { $set: { sellerVerified: "false", verifyMessage: "Verification Denied" } }
                 const verifiedSuccess = await Users.updateOne(findSeller, updatedDoc)
                 res.send({
                     message: "success",
