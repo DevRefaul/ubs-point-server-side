@@ -23,6 +23,7 @@ const run = async () => {
     const Bikes = client.db('USB').collection('bikes')
     const Users = client.db('USB').collection('users')
     const ReportedPosts = client.db('USB').collection('reportedposts')
+    const VerificationApplication = client.db("USB").collection('verification-applications')
 
     try {
 
@@ -237,6 +238,22 @@ const run = async () => {
         })
 
 
+        // verification allplication by seller
+        app.post('/applyverify', async (req, res) => {
+            try {
+                const sellerInfo = req.body;
+                const result = await VerificationApplication.insertOne(sellerInfo)
+                res.send({
+                    message: "success",
+                    result
+                })
+            } catch (error) {
+                res.send({
+                    message: error.message
+                })
+            }
+
+        })
 
 
 
