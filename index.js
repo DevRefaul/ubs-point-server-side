@@ -255,7 +255,21 @@ const run = async () => {
 
         })
 
-
+        // get all application for verifying sellers
+        app.get('/verifyapplication', async (req, res) => {
+            try {
+                const query = {}
+                const applications = await VerificationApplication.find(query).toArray()
+                res.send({
+                    message: "success",
+                    applications
+                })
+            } catch (error) {
+                res.send({
+                    message: error.message
+                })
+            }
+        })
 
 
 
