@@ -336,6 +336,22 @@ const run = async () => {
         })
 
 
+        // make sell post
+        app.post('/makepost', async (req, res) => {
+            try {
+                const bikeInfo = req.body;
+                const postResponse = await Bikes.insertOne(bikeInfo)
+                res.send({
+                    message: "success",
+                    postResponse
+                })
+            } catch (error) {
+                res.send({
+                    message: error.message
+                })
+            }
+        })
+
 
     } catch (error) {
 
