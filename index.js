@@ -353,6 +353,25 @@ const run = async () => {
         })
 
 
+        // getting posted bikes by seller email
+        app.get('/singlesellerposts', async (req, res) => {
+            try {
+                const sellerEmail = req.query.email;
+                const filter = { sellerMail: sellerEmail }
+
+                const sellerPosts = await Bikes.find(filter).toArray()
+                res.send({
+                    message: "success",
+                    sellerPosts
+                })
+            } catch (error) {
+                res.send({
+                    message: error.message
+                })
+            }
+        })
+
+
     } catch (error) {
 
     }
