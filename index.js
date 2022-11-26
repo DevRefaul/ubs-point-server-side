@@ -271,6 +271,45 @@ const run = async () => {
             }
         })
 
+        // verifying seller and updating their verified status
+        app.patch('/verifyseller', async (req, res) => {
+            try {
+                const sellerEmail = req.body.email;
+
+                const filter = { email: sellerEmail }
+                const findSeller = await Users.findOne(filter)
+
+                const updatedDoc = { $set: { sellerVerified: "true" } }
+                const verifiedSuccess = await Users.updateOne(findSeller, updatedDoc)
+                res.send({
+                    message: "success",
+                    verifiedSuccess
+                })
+            } catch (error) {
+                res.send({
+                    message: error.message
+                })
+            }
+        })
+
+
+        // delete application after verify 
+        app.delete('/deleteapplication/:id', async (req, res) => {
+            try {
+                const applicantId = req.params.id;
+
+                const filter = { _id: ObjectId(applicantId) }
+                const deleteApplication = await VerificationApplication.deleteOne(filter)
+                res.send({
+                    message: "success",
+                    deleteApplication
+                })
+            } catch (error) {
+                res.send({
+                    message: error.message
+                })
+            }
+        })
 
 
 
