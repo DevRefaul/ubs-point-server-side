@@ -25,7 +25,7 @@ const run = async () => {
     const ReportedPosts = client.db('USB').collection('reportedposts')
     const VerificationApplication = client.db("USB").collection('verification-applications')
     const BookedBikes = client.db("USB").collection("bookedBikes")
-
+    const SoldBikes = client.db("USB").collection("soldBikes")
 
     try {
 
@@ -568,7 +568,6 @@ const run = async () => {
             try {
                 const email = req.query.email;
                 const filter = { sellerEmail: email }
-                console.log(email, filter)
                 const bookedBikes = await BookedBikes.find(filter).toArray()
                 res.send({
                     message: "success",
@@ -581,13 +580,28 @@ const run = async () => {
             }
         })
 
+        // get sold bikes by seller
+        app.get('/sellersoldbikes', async (req, res) => {
+            try {
+                const email = req.query.email;
+                const filter = { isPaid: "paid" }
+                const soldBikes = await BookedBikes.find(filter).toArray()
+                res.send({
+                    message: "success",
+                    soldBikes
+                })
+            } catch (error) {
+                res.send({
+                    message: error.message
+                })
+            }
+        })
+
         // delete booking
         app.delete("/deletebooking/:id", async (req, res) => {
             try {
                 const id = req.params.id;
-                console.log(id);
                 const filter = { _id: ObjectId(id) }
-                console.log(filter)
                 const deletedResponse = await BookedBikes.deleteOne(filter)
                 res.send({
                     message: "success",
@@ -601,6 +615,22 @@ const run = async () => {
         })
 
 
+        // post api for sold bikes
+        app.post("/soldbikes", async (req, res) => {
+            try {
+                const soldBikeInfo = req.body
+                const saveToDB = await SoldBikes.insertOne(soldBikeInfo)
+                res.send({
+                    message: "success",
+                    saveToDB
+                })
+            } catch (error) {
+                res.send({
+                    message: error.message
+                })
+            }
+
+        })
 
 
     } catch (error) {
