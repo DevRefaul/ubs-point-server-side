@@ -39,7 +39,6 @@ const run = async () => {
 
             try {
                 const user = req.body;
-                console.log(user)
                 const result = await Users.insertOne(user)
                 res.send({
                     message: "Success",
@@ -94,7 +93,7 @@ const run = async () => {
             try {
                 const email = req.query.email;
                 const filter = { email: email }
-                console.log(filter)
+
                 const result = await Users.findOne(filter)
                 res.send({
                     message: "Success",
@@ -293,7 +292,7 @@ const run = async () => {
             }
         })
 
-        // cancel verifying seller and updating their verified status
+        // cancel verifying seller and updating their verified status by admin
         app.patch('/cancelverify', async (req, res) => {
             try {
                 const sellerEmail = req.body.email;
@@ -301,7 +300,6 @@ const run = async () => {
                 const filter = { email: sellerEmail }
                 const findSeller = await Users.findOne(filter)
 
-                console.log(findSeller);
 
                 const updatedDoc = { $set: { sellerVerified: "false", verifyMessage: "Verification Denied" } }
                 const verifiedSuccess = await Users.updateOne(findSeller, updatedDoc)
@@ -370,6 +368,33 @@ const run = async () => {
                 })
             }
         })
+
+
+        // apis for seller actions in teir posted products
+
+        // promote post api for seller
+        app.patch('/promotepost', async (req, res) => {
+            try {
+                const id = req.body.id;
+
+                const filter = { _id: ObjectId(id) }
+                const updatedDoc = { $set: { "advertise": "true" } }
+
+                const promotedResponse = await Bikes.updateOne(filter, updatedDoc)
+                res.send({
+                    message: "success",
+                    promotedResponse
+                })
+            } catch (error) {
+                res.send({
+                    message: error.message
+                })
+            }
+
+        })
+
+
+
 
 
     } catch (error) {
