@@ -434,6 +434,29 @@ const run = async () => {
             }
         })
 
+        // update product booking
+        app.patch('/updateProductBooking', async (req, res) => {
+            try {
+                const id = req.body.id;
+                const availablity = req.body.available
+
+                console.log(id, availablity)
+
+                const filter = { _id: ObjectId(id) };
+
+                const updatedDoc = { $set: { "isBooked": availablity } }
+                const updatedProductResponse = await Bikes.updateOne(filter, updatedDoc)
+                res.send({
+                    message: "success",
+                    updatedProductResponse
+                })
+            } catch (error) {
+                res.send({
+                    message: error.message
+                })
+            }
+        })
+
 
         // api for booking bike for buyer
         app.post("/booked", async (req, res) => {
@@ -453,7 +476,23 @@ const run = async () => {
 
         })
 
+        // get booked bikes by user
+        app.get('/userbookings', async (req, res) => {
+            try {
+                const email = req.query.email;
+                const filter = { bookerEmail: email }
 
+                const bookedBikes = await BookedBikes.find(filter).toArray()
+                res.send({
+                    message: "success",
+                    bookedBikes
+                })
+            } catch (error) {
+                res.send({
+                    message: error.message
+                })
+            }
+        })
 
 
 
