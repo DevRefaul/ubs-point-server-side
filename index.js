@@ -412,6 +412,28 @@ const run = async () => {
             }
         })
 
+        // update product availability
+        app.patch('/updateProductAvalablity', async (req, res) => {
+            try {
+                const id = req.body.id;
+                const availablity = req.body.available
+                const filter = { _id: ObjectId(id) };
+
+                const updatedDoc = { $set: { "available": availablity } }
+                const updatedProductResponse = await Bikes.updateOne(filter, updatedDoc)
+                res.send({
+                    message: "success",
+                    updatedProductResponse
+                })
+            } catch (error) {
+                res.send({
+                    message: error.message
+                })
+            }
+        })
+
+
+
 
 
     } catch (error) {
