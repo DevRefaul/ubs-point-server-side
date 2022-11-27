@@ -24,6 +24,8 @@ const run = async () => {
     const Users = client.db('USB').collection('users')
     const ReportedPosts = client.db('USB').collection('reportedposts')
     const VerificationApplication = client.db("USB").collection('verification-applications')
+    const BookedBikes = client.db("USB").collection("bookedBikes")
+
 
     try {
 
@@ -430,6 +432,25 @@ const run = async () => {
                     message: error.message
                 })
             }
+        })
+
+
+        // api for booking bike for buyer
+        app.post("/booked", async (req, res) => {
+            try {
+
+                const bookedInfo = req.body;
+                const bookingInfo = await BookedBikes.insertOne(bookedInfo)
+                res.send({
+                    message: "success",
+                    bookingInfo
+                })
+            } catch (error) {
+                res.send({
+                    message: error.message
+                })
+            }
+
         })
 
 
