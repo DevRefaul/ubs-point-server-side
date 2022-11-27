@@ -394,6 +394,23 @@ const run = async () => {
         })
 
 
+        // deleting single post api for seller
+        app.delete('/deletesellerpost/:id', async (req, res) => {
+            try {
+                const id = req.params.id;
+                const filter = { _id: ObjectId(id) }
+
+                const deleteResponse = await Bikes.deleteOne(filter)
+                res.send({
+                    message: "success",
+                    deleteResponse
+                })
+            } catch (error) {
+                res.send({
+                    message: error.message
+                })
+            }
+        })
 
 
 
