@@ -39,7 +39,6 @@ const run = async () => {
         app.post("/create-payment-intent", async (req, res) => {
             try {
                 const price = req.body.price;
-                // console.log(price);
                 const amount = parseFloat(price * 100)
 
                 // Create a PaymentIntent with the order amount and currency
@@ -206,6 +205,28 @@ const run = async () => {
                 // getting the values
                 const bike = await Bikes.findOne(query)
                 res.send({ message: "Success", bike })
+            } catch (error) {
+                res.send({
+                    message: error.message
+                })
+            }
+        })
+
+        // modifying bikes info
+        app.patch('/bikes/:id', async (req, res) => {
+            try {
+                const id = req.params.id;
+                const updatedInfo = req.body;
+                console.log(updatedInfo);
+                const filter = { _id: ObjectId(id) }
+                console.log(filter)
+                const updatedDoc = { $set: updatedInfo }
+                console.log(updatedDoc);
+                const updatedResponse = await Bikes.updateOne(filter, updatedDoc)
+                res.send({
+                    message: "success",
+                    updatedResponse
+                })
             } catch (error) {
                 res.send({
                     message: error.message
@@ -467,8 +488,6 @@ const run = async () => {
                 const id = req.body.id;
                 const availablity = req.body.available
 
-                console.log(id, availablity)
-
                 const filter = { _id: ObjectId(id) };
 
                 const updatedDoc = { $set: { "isBooked": availablity } }
@@ -484,7 +503,7 @@ const run = async () => {
             }
         })
 
-        // update product booking
+        // update product payment
         app.patch('/updateProductPayment', async (req, res) => {
 
             try {
@@ -544,11 +563,31 @@ const run = async () => {
             }
         })
 
+        // get booked bikes by seller
+        app.get('/sellerBookedPosts', async (req, res) => {
+            try {
+                const email = req.query.email;
+                const filter = { sellerEmail: email }
+                console.log(email, filter)
+                const bookedBikes = await BookedBikes.find(filter).toArray()
+                res.send({
+                    message: "success",
+                    bookedBikes
+                })
+            } catch (error) {
+                res.send({
+                    message: error.message
+                })
+            }
+        })
+
         // delete booking
-        app.delete("/deleteebooking/:id", async (req, res) => {
+        app.delete("/deletebooking/:id", async (req, res) => {
             try {
                 const id = req.params.id;
+                console.log(id);
                 const filter = { _id: ObjectId(id) }
+                console.log(filter)
                 const deletedResponse = await BookedBikes.deleteOne(filter)
                 res.send({
                     message: "success",
