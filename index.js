@@ -212,7 +212,7 @@ const run = async () => {
 
 
         // getting bikes by category
-        app.get('/bikes', verifyJWT, async (req, res) => {
+        app.get('/bikes', async (req, res) => {
             try {
                 const query = req.query;
 
