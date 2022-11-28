@@ -5,7 +5,7 @@ const port = process.env.PORT || 5000;
 const jwt = require('jsonwebtoken')
 const { MongoClient, ObjectId } = require('mongodb');
 const app = express()
-const stripe = require("stripe")("sk_test_51M7I4PBM1N4t2PWxyTQ1eKolkTEiUUCpkWMKrx1UJDyyqz7huS1gSwy3EqzzDP1Yrn0gMuO79da0K0DUJuaUuUVB00vBlJ4y7g");
+const stripe = require("stripe")(process.env.STRIPE_KEY);
 
 app.use(cors())
 app.use(express.json())
