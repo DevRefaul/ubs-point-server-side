@@ -58,7 +58,7 @@ const run = async () => {
 
 
         // payment api for user
-        app.post("/create-payment-intent", async (req, res) => {
+        app.post("/create-payment-intent", verifyJWT, async (req, res) => {
             try {
 
                 const price = req.body.price;
@@ -96,7 +96,7 @@ const run = async () => {
         });
 
         // creating user collection in database
-        app.post('/adduser', async (req, res) => {
+        app.post('/adduser', verifyJWT, async (req, res) => {
 
             try {
                 const user = req.body;
@@ -115,7 +115,7 @@ const run = async () => {
         })
 
         // get all the buyers
-        app.get('/buyers', async (req, res) => {
+        app.get('/buyers', verifyJWT, async (req, res) => {
             try {
                 const filter = { role: "buyer" }
                 const buyers = await Users.find(filter).toArray()
@@ -132,7 +132,7 @@ const run = async () => {
         })
 
         // get all the sellers
-        app.get('/sellers', async (req, res) => {
+        app.get('/sellers', verifyJWT, async (req, res) => {
             try {
                 const filter = { role: "seller" }
                 const sellers = await Users.find(filter).toArray()
@@ -150,7 +150,7 @@ const run = async () => {
 
 
         // getting a user by emai
-        app.get('/user', async (req, res) => {
+        app.get('/user', verifyJWT, async (req, res) => {
             try {
                 const email = req.query.email;
                 const filter = { email: email }
@@ -168,7 +168,7 @@ const run = async () => {
         })
 
         // update user name
-        app.patch('/updatename', async (req, res) => {
+        app.patch('/updatename', verifyJWT, async (req, res) => {
             try {
                 const userInfo = req.body;
 
@@ -193,7 +193,7 @@ const run = async () => {
 
 
         // delete a user
-        app.delete('/deleteuser/:id', async (req, res) => {
+        app.delete('/deleteuser/:id', verifyJWT, async (req, res) => {
             try {
                 const id = req.params.id;
                 const filter = { _id: ObjectId(id) };
@@ -212,7 +212,7 @@ const run = async () => {
 
 
         // getting bikes by category
-        app.get('/bikes', async (req, res) => {
+        app.get('/bikes', verifyJWT, async (req, res) => {
             try {
                 const query = req.query;
 
@@ -229,7 +229,7 @@ const run = async () => {
         })
 
         // getting bike by id
-        app.get('/bikes/:id', async (req, res) => {
+        app.get('/bikes/:id', verifyJWT, async (req, res) => {
             try {
                 const id = req.params.id;
 
@@ -246,7 +246,7 @@ const run = async () => {
         })
 
         // modifying bikes info
-        app.patch('/bikes/:id', async (req, res) => {
+        app.patch('/bikes/:id', verifyJWT, async (req, res) => {
             try {
                 const id = req.params.id;
                 const updatedInfo = req.body;
@@ -266,7 +266,7 @@ const run = async () => {
 
 
         // get all the reported post
-        app.get('/reported', async (req, res) => {
+        app.get('/reported', verifyJWT, async (req, res) => {
             try {
                 const query = {};
                 const reportedItems = await ReportedPosts.find(query).toArray()
@@ -280,7 +280,7 @@ const run = async () => {
 
 
         // report post
-        app.post('/report', async (req, res) => {
+        app.post('/report', verifyJWT, async (req, res) => {
             try {
                 const reportedInfo = req.body
                 const reportedPostInfo = { reportedInfo: reportedInfo }
@@ -295,7 +295,7 @@ const run = async () => {
         })
 
         // delete reported post
-        app.delete('/deletepost', async (req, res) => {
+        app.delete('/deletepost', verifyJWT, async (req, res) => {
             try {
                 const id = req.query.reportedpost;
                 const reportedId = req.query.reportedqueue;
@@ -319,7 +319,7 @@ const run = async () => {
 
 
         // verification allplication by seller
-        app.post('/applyverify', async (req, res) => {
+        app.post('/applyverify', verifyJWT, async (req, res) => {
             try {
                 const sellerInfo = req.body;
                 const result = await VerificationApplication.insertOne(sellerInfo)
@@ -336,7 +336,7 @@ const run = async () => {
         })
 
         // get all application for verifying sellers
-        app.get('/verifyapplication', async (req, res) => {
+        app.get('/verifyapplication', verifyJWT, async (req, res) => {
             try {
                 const query = {}
                 const applications = await VerificationApplication.find(query).toArray()
@@ -352,7 +352,7 @@ const run = async () => {
         })
 
         // verifying seller and updating their verified status
-        app.patch('/verifyseller', async (req, res) => {
+        app.patch('/verifyseller', verifyJWT, async (req, res) => {
             try {
                 const sellerEmail = req.body.email;
 
@@ -373,7 +373,7 @@ const run = async () => {
         })
 
         // cancel verifying seller and updating their verified status by admin
-        app.patch('/cancelverify', async (req, res) => {
+        app.patch('/cancelverify', verifyJWT, async (req, res) => {
             try {
                 const sellerEmail = req.body.email;
 
@@ -396,7 +396,7 @@ const run = async () => {
 
 
         // delete application after verify 
-        app.delete('/deleteapplication/:id', async (req, res) => {
+        app.delete('/deleteapplication/:id', verifyJWT, verifyJWT, async (req, res) => {
             try {
                 const applicantId = req.params.id;
 
@@ -415,7 +415,7 @@ const run = async () => {
 
 
         // make sell post
-        app.post('/makepost', async (req, res) => {
+        app.post('/makepost', verifyJWT, async (req, res) => {
             try {
                 const bikeInfo = req.body;
                 const postResponse = await Bikes.insertOne(bikeInfo)
@@ -432,7 +432,7 @@ const run = async () => {
 
 
         // getting posted bikes by seller email
-        app.get('/singlesellerposts', async (req, res) => {
+        app.get('/singlesellerposts', verifyJWT, async (req, res) => {
             try {
                 const sellerEmail = req.query.email;
                 const filter = { sellerMail: sellerEmail }
@@ -453,7 +453,7 @@ const run = async () => {
         // apis for seller actions in teir posted products
 
         // promote post api for seller
-        app.patch('/promotepost', async (req, res) => {
+        app.patch('/promotepost', verifyJWT, async (req, res) => {
             try {
                 const id = req.body.id;
 
@@ -475,7 +475,7 @@ const run = async () => {
 
 
         // deleting single post api for seller
-        app.delete('/deletesellerpost/:id', async (req, res) => {
+        app.delete('/deletesellerpost/:id', verifyJWT, async (req, res) => {
             try {
                 const id = req.params.id;
                 const filter = { _id: ObjectId(id) }
@@ -493,7 +493,7 @@ const run = async () => {
         })
 
         // update product availability
-        app.patch('/updateProductAvalablity', async (req, res) => {
+        app.patch('/updateProductAvalablity', verifyJWT, async (req, res) => {
             try {
                 const id = req.body.id;
                 const availablity = req.body.available
@@ -513,7 +513,7 @@ const run = async () => {
         })
 
         // update product booking
-        app.patch('/updateProductBooking', async (req, res) => {
+        app.patch('/updateProductBooking', verifyJWT, async (req, res) => {
             try {
                 const id = req.body.id;
                 const availablity = req.body.available
@@ -534,7 +534,7 @@ const run = async () => {
         })
 
         // update product payment
-        app.patch('/updateProductPayment', async (req, res) => {
+        app.patch('/updateProductPayment', verifyJWT, async (req, res) => {
 
             try {
 
@@ -558,7 +558,7 @@ const run = async () => {
 
 
         // api for booking bike for buyer
-        app.post("/booked", async (req, res) => {
+        app.post("/booked", verifyJWT, async (req, res) => {
             try {
 
                 const bookedInfo = req.body;
@@ -576,7 +576,7 @@ const run = async () => {
         })
 
         // get booked bikes by user
-        app.get('/userbookings', async (req, res) => {
+        app.get('/userbookings', verifyJWT, async (req, res) => {
             try {
                 const email = req.query.email;
                 const filter = { bookerEmail: email }
@@ -594,7 +594,7 @@ const run = async () => {
         })
 
         // get booked bikes by seller
-        app.get('/sellerBookedPosts', async (req, res) => {
+        app.get('/sellerBookedPosts', verifyJWT, async (req, res) => {
             try {
                 const email = req.query.email;
                 const filter = { sellerEmail: email }
@@ -611,7 +611,7 @@ const run = async () => {
         })
 
         // get sold bikes by seller
-        app.get('/sellersoldbikes', async (req, res) => {
+        app.get('/sellersoldbikes', verifyJWT, async (req, res) => {
             try {
                 const email = req.query.email;
                 const filter = { isPaid: "paid" }
@@ -628,7 +628,7 @@ const run = async () => {
         })
 
         // delete booking
-        app.delete("/deletebooking/:id", async (req, res) => {
+        app.delete("/deletebooking/:id", verifyJWT, async (req, res) => {
             try {
                 const id = req.params.id;
                 const filter = { _id: ObjectId(id) }
@@ -646,7 +646,7 @@ const run = async () => {
 
 
         // post api for sold bikes
-        app.post("/soldbikes", async (req, res) => {
+        app.post("/soldbikes", verifyJWT, async (req, res) => {
             try {
                 const soldBikeInfo = req.body
                 const saveToDB = await SoldBikes.insertOne(soldBikeInfo)
