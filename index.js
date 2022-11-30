@@ -615,7 +615,7 @@ const run = async () => {
         app.get('/sellersoldbikes', verifyJWT, async (req, res) => {
             try {
                 const email = req.query.email;
-                const filter = { isPaid: "paid" }
+                const filter = { sellerEmail: email }
                 const soldBikes = await BookedBikes.find(filter).toArray()
                 res.send({
                     message: "success",
