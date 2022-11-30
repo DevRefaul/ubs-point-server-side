@@ -96,10 +96,11 @@ const run = async () => {
         });
 
         // creating user collection in database
-        app.post('/adduser', verifyJWT, async (req, res) => {
+        app.post('/adduser', async (req, res) => {
 
             try {
                 const user = req.body;
+                console.log(req.body)
                 const result = await Users.insertOne(user)
                 res.send({
                     message: "Success",
